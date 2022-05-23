@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="/main.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <!-- main  -->
+  <div class="container">
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg" style="background-color:#f0f0f0; border:1px solid silver; border-radius: 5px;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">근면성실학상들</a>
+        <button id="homebtn" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
+            </li>
+          </ul>
+          <!-- 해시태그 & 닉 검색 -->
+          <form id="hashtag-form" action="/hashtag">
+            <input type="text" name="hashtag" placeholder="해시태그/닉네임 검색">
+            <button class="btn2">검색</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <!-- profile 왼쪽 -->
+    <div class="profile-wrap">
+      <div class="profile">
+        {% if user and user.id %}
+        <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
+        <div class="half">
+          <div>팔로잉</div>
+          <div class="count following-count">{{followingCount}}</div>
+        </div>
+        <div class="half">
+          <div>팔로워</div>
+          <div class="count follower-count">{{followerCount}}</div>
+        </div>
+        <input id="my-id" type="hidden" value="{{user.id}}">
+        <a id="my-profile" href="/profile" class="btn2">내 프로필</a>
+        <a id="logout" href="/auth/logout" class="btn2">로그아웃</a>
+        {% else %}
+        <form id="login-form" action="/auth/login" method="post">
+          <div class="input-group">
+            <label for="email">이메일</label>
+            <input id="email" type="email" name="email" required autofocus>
+          </div>
+          <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input id="password" type="password" name="password" required>
+          </div>
+          <a id="join" href="/join" class="btn2">회원가입</a>
+          <button id="login" type="submit" class="btn2">로그인</button>
+          <a id="kakao" href="/auth/kakao" class="btn2">카카오톡</a>
+        </form>
+        {% endif %}
+      </div>
+      <footer>
+        <b>prj-name</b> 근면성실학상들 (N)
+      </footer>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    window.onload = () => {
+      if (new URL(location.href).searchParams.get('loginError')) {
+        alert(new URL(location.href).searchParams.get('loginError'));
+      }
+    };
+  </script>
+  {% block script %}
+
+  {% endblock %}
+</body>
+
+</html>
